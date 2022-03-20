@@ -1,25 +1,25 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import MyTest from "./components/learning-examples/TestsComponents";
+import ThirdTest from "./components/learning-examples/ThirdTest";
+import SecondTest from "./components/learning-examples/SecondTest";
+import Counter from "./components/counter/Counter";
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Counter />
     </div>
   );
 }
 
+function LearningComponents() {
+  return (
+    <div className="LearningComponents">
+      Hello World!
+      <MyTest />
+      <SecondTest />
+      <ThirdTest />
+    </div>
+  );
+}
 export default App;
