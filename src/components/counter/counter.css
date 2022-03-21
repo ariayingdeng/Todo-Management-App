@@ -1,3 +1,7 @@
+body {
+    margin: 30px;
+}
+
 button {
     background-color: blue;
     font-size: 32px;
