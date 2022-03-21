@@ -4,6 +4,7 @@ import withNavigation from "./WithNavigation";
 import withParams from "./WithParams";
 import { Container, Navbar, Nav } from "react-bootstrap";
 import AuthenticationService from "./AuthenticationService";
+import AuthenticatedRoute from "./AuthenticatedRoute";
 
 class TodoApp extends Component {
   render() {
@@ -17,12 +18,12 @@ class TodoApp extends Component {
           <Routes>
             <Route path="/" element={<LoginComponentWithNavigation />} />
             <Route path="/login" element={<LoginComponentWithNavigation />} />
-            <Route path="/logout" element={<LogoutComponent />} />
+            <Route path="/logout" element={<AuthenticatedRoute><LogoutComponent /></AuthenticatedRoute>} />
             <Route
               path="/welcome/:name"
-              element={<WelcomeComponentWithParams />}
+              element={<AuthenticatedRoute><WelcomeComponentWithParams /></AuthenticatedRoute>}
             />
-            <Route path="/todos" element={<TodosComponents />} />
+            <Route path="/todos" element={<AuthenticatedRoute><TodosComponents /></AuthenticatedRoute>} />
             <Route path="*" element={<ErrorComponent />} />
           </Routes>
           <FooterComponent />
