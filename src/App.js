@@ -2,12 +2,14 @@ import "./App.css";
 import MyTest from "./components/learning-examples/TestsComponents";
 import ThirdTest from "./components/learning-examples/ThirdTest";
 import SecondTest from "./components/learning-examples/SecondTest";
-import Counter from "./components/counter/Counter";
+import TodoApp from "./components/todo/TodoApp";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 function App() {
   return (
     <div className="App">
-      <Counter />
+      {/* <Counter /> */}
+      <TodoApp />
     </div>
   );
 }
