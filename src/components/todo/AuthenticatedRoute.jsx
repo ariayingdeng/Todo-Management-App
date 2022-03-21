@@ -4,7 +4,7 @@ import AuthenticationService from "./AuthenticationService";
 
 class AuthenticatedRoute extends Component {
   render() {
-    if (AuthenticationService.isLoggedIn) {
+    if (AuthenticationService.isLoggedIn()) {
       return { ...this.props.children };
     }
     return <Navigate to="/login" />;
