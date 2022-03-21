@@ -3,15 +3,17 @@ import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
 import withNavigation from "./WithNavigation";
 import withParams from "./WithParams";
 import { Container, Navbar, Nav } from "react-bootstrap";
+import AuthenticationService from "./AuthenticationService";
 
 class TodoApp extends Component {
   render() {
     const LoginComponentWithNavigation = withNavigation(LoginComponent);
     const WelcomeComponentWithParams = withParams(WelcomeComponent);
+    const HeaderComponentWithNavigation = withNavigation(HeaderComponent);
     return (
       <div>
         <Router>
-          <HeaderComponent />
+          <HeaderComponentWithNavigation />
           <Routes>
             <Route path="/" element={<LoginComponentWithNavigation />} />
             <Route path="/login" element={<LoginComponentWithNavigation />} />
@@ -78,26 +80,26 @@ class TodosComponents extends Component {
       <div>
         <h1>TODO LIST</h1>
         <Container>
-        <table className="table">
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>DESCRIPTION</th>
-              <th>TARGET DATE</th>
-              <th>IS COMPLETED?</th>
-            </tr>
-          </thead>
-          <tbody>
-            {this.state.todos.map((todo) => (
+          <table className="table">
+            <thead>
               <tr>
-                <td>{todo.id}</td>
-                <td>{todo.description}</td>
-                <td>{todo.targetDate.toDateString()}</td>
-                <td>{todo.done}</td>
+                <th>ID</th>
+                <th>DESCRIPTION</th>
+                <th>TARGET DATE</th>
+                <th>IS COMPLETED?</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {this.state.todos.map((todo) => (
+                <tr key={todo.id}>
+                  <td>{todo.id}</td>
+                  <td>{todo.description}</td>
+                  <td>{todo.targetDate.toDateString()}</td>
+                  <td>{todo.done}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </Container>
       </div>
     );
@@ -169,6 +171,7 @@ class LoginComponent extends Component {
   loginClicked() {
     //hardcode authentication: ying ying
     if (this.state.username === "ying" && this.state.password === "ying") {
+      AuthenticationService.registerSuccessfulLogin(this.state.username);
       this.props.navigate(`/welcome/${this.state.username}`);
     } else {
       this.setState({
@@ -200,7 +203,8 @@ class WelcomeComponent extends Component {
       <div>
         <h1>Welcome!</h1>
         <Container>
-          Welcome, {this.props.params.name}! You can manage your todo list <Link to="/todos">here</Link>!
+          Welcome, {this.props.params.name}! You can manage your todo list{" "}
+          <Link to="/todos">here</Link>!
         </Container>
       </div>
     );
@@ -224,25 +228,34 @@ class LogoutComponent extends Component {
 
 class HeaderComponent extends Component {
   render() {
+    const isUserLoggedIn = AuthenticationService.isLoggedIn();
     return (
       <Navbar expand="lg" bg="dark" variant="dark">
         <Container>
           <Navbar.Brand href="/welcome/ying">Aria's</Navbar.Brand>
-          <Navbar.Collapse>
-            <Nav.Link className="navbar-link" href="/welcome/ying">
-              Home
-            </Nav.Link>
-            <Nav.Link className="navbar-link" href="/todos">
-              Todos
-            </Nav.Link>
-          </Navbar.Collapse>
+          {isUserLoggedIn && (<Navbar.Collapse>
+              <Nav.Link className="navbar-link" href="/welcome/ying">
+                Home
+              </Nav.Link>
+              <Nav.Link className="navbar-link" href="/todos">
+                Todos
+              </Nav.Link>
+          </Navbar.Collapse>)}
           <Navbar.Collapse className="justify-content-end">
-            <Nav.Link className="navbar-link" href="/login">
-              Login
-            </Nav.Link>
-            <Nav.Link className="navbar-link" href="/logout">
-              Logout
-            </Nav.Link>
+            {!isUserLoggedIn && (
+              <Nav.Link className="navbar-link" href="/login">
+                Login
+              </Nav.Link>
+            )}
+            {isUserLoggedIn && (
+              <Nav.Link
+                className="navbar-link"
+                href="/logout"
+                onClick={AuthenticationService.logout}
+              >
+                Logout
+              </Nav.Link>
+            )}
           </Navbar.Collapse>
         </Container>
       </Navbar>
