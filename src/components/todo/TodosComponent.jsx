@@ -8,10 +8,18 @@ class TodosComponent extends Component {
     super(props);
     this.state = {
       todos: [],
+      currentId: 0,
+      message: null
     };
+    this.deleteTodoClicked = this.deleteTodoClicked.bind(this);
+    this.refreshTodoList = this.refreshTodoList.bind(this)
   }
 
   componentDidMount() {
+    this.refreshTodoList();
+  }
+
+  refreshTodoList() {
     let username = AuthenticationService.getLoggedUsername();
     TodoService.retrieveAllTodos(username)
       .then((response) => {
@@ -24,6 +32,7 @@ class TodosComponent extends Component {
     return (
       <div>
         <h1>TODO LIST</h1>
+        {this.state.message && <div className="alert alert-success">{this.state.message}</div>}
         <Container>
           <table className="table">
             <thead>
@@ -32,6 +41,7 @@ class TodosComponent extends Component {
                 <th>DESCRIPTION</th>
                 <th>TARGET DATE</th>
                 <th>IS COMPLETED?</th>
+                <th>DELETE</th>
               </tr>
             </thead>
             <tbody>
@@ -41,6 +51,7 @@ class TodosComponent extends Component {
                   <td>{todo.description}</td>
                   <td>{todo.targetDate.toString()}</td>
                   <td>{todo.done.toString()}</td>
+                  <td><button className="btn btn-warning" onClick={() => this.deleteTodoClicked(todo.id)}>Delete</button></td>
                 </tr>
               ))}
             </tbody>
@@ -48,6 +59,15 @@ class TodosComponent extends Component {
         </Container>
       </div>
     );
+  }
+
+  deleteTodoClicked(id) {
+    let username = AuthenticationService.getLoggedUsername();
+    TodoService.deleteTodo(username, id)
+    .then( response => {
+      this.setState({ message : `Deleted todo ${id} successfully`});
+      this.refreshTodoList();
+    })
   }
 }
 
