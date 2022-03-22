@@ -1,37 +1,23 @@
 import React, { Component } from "react";
 import { Container } from "react-bootstrap";
+import TodoService from "../api/todo-api/TodoService";
+import AuthenticationService from "./AuthenticationService";
 
 class TodosComponent extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      todos: [
-        {
-          id: 1,
-          description: "Start to learn React",
-          targetDate: new Date(),
-          done: false,
-        },
-        {
-          id: 2,
-          description: "Become an expert at React",
-          targetDate: new Date(),
-          done: false,
-        },
-        {
-          id: 3,
-          description: "Start to learn Spring Boot",
-          targetDate: new Date(),
-          done: false,
-        },
-        {
-          id: 4,
-          description: "Become an expert at Spring Boot",
-          targetDate: new Date(),
-          done: false,
-        },
-      ],
+      todos: [],
     };
+  }
+
+  componentDidMount() {
+    let username = AuthenticationService.getLoggedUsername();
+    TodoService.retrieveAllTodos(username)
+      .then((response) => {
+        this.setState({ todos: response.data });
+      })
+      .catch((error) => console.log(error));
   }
 
   render() {
@@ -53,8 +39,8 @@ class TodosComponent extends Component {
                 <tr key={todo.id}>
                   <td>{todo.id}</td>
                   <td>{todo.description}</td>
-                  <td>{todo.targetDate.toDateString()}</td>
-                  <td>{todo.done}</td>
+                  <td>{todo.targetDate.toString()}</td>
+                  <td>{todo.done.toString()}</td>
                 </tr>
               ))}
             </tbody>
