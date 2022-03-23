@@ -3,16 +3,17 @@ import { Container } from "react-bootstrap";
 import TodoService from "../api/todo-api/TodoService";
 import AuthenticationService from "./AuthenticationService";
 
-class TodosComponent extends Component {
+class ListTodosComponent extends Component {
   constructor(props) {
     super(props);
     this.state = {
       todos: [],
       currentId: 0,
-      message: null
+      message: null,
     };
     this.deleteTodoClicked = this.deleteTodoClicked.bind(this);
-    this.refreshTodoList = this.refreshTodoList.bind(this)
+    this.refreshTodoList = this.refreshTodoList.bind(this);
+    this.updateTodoClicked = this.updateTodoClicked.bind(this);
   }
 
   componentDidMount() {
@@ -32,7 +33,9 @@ class TodosComponent extends Component {
     return (
       <div>
         <h1>TODO LIST</h1>
-        {this.state.message && <div className="alert alert-success">{this.state.message}</div>}
+        {this.state.message && (
+          <div className="alert alert-success">{this.state.message}</div>
+        )}
         <Container>
           <table className="table">
             <thead>
@@ -41,6 +44,7 @@ class TodosComponent extends Component {
                 <th>DESCRIPTION</th>
                 <th>TARGET DATE</th>
                 <th>IS COMPLETED?</th>
+                <th>UPDATE</th>
                 <th>DELETE</th>
               </tr>
             </thead>
@@ -51,7 +55,22 @@ class TodosComponent extends Component {
                   <td>{todo.description}</td>
                   <td>{todo.targetDate.toString()}</td>
                   <td>{todo.done.toString()}</td>
-                  <td><button className="btn btn-warning" onClick={() => this.deleteTodoClicked(todo.id)}>Delete</button></td>
+                  <td>
+                    <button
+                      className="btn btn-success"
+                      onClick={() => this.updateTodoClicked(todo.id)}
+                    >
+                      Update
+                    </button>
+                  </td>
+                  <td>
+                    <button
+                      className="btn btn-warning"
+                      onClick={() => this.deleteTodoClicked(todo.id)}
+                    >
+                      Delete
+                    </button>
+                  </td>
                 </tr>
               ))}
             </tbody>
@@ -63,12 +82,15 @@ class TodosComponent extends Component {
 
   deleteTodoClicked(id) {
     let username = AuthenticationService.getLoggedUsername();
-    TodoService.deleteTodo(username, id)
-    .then( response => {
-      this.setState({ message : `Deleted todo ${id} successfully`});
+    TodoService.deleteTodo(username, id).then((response) => {
+      this.setState({ message: `Deleted todo ${id} successfully` });
       this.refreshTodoList();
-    })
+    });
+  }
+
+  updateTodoClicked(id) {
+    this.props.navigate(`/todos/${id}`);
   }
 }
 
-export default TodosComponent;
+export default ListTodosComponent;
