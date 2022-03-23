@@ -11,7 +11,7 @@ class TodoComponent extends Component {
 
     this.state = {
       id: this.props.params.id,
-      description: "Learn Formik",
+      description: "",
       targetDate: moment(new Date()).format("YYYY-MM-DD"),
     };
 
