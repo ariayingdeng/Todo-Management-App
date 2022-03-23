@@ -15,6 +15,7 @@ class ListTodosComponent extends Component {
     this.deleteTodoClicked = this.deleteTodoClicked.bind(this);
     this.refreshTodoList = this.refreshTodoList.bind(this);
     this.updateTodoClicked = this.updateTodoClicked.bind(this);
+    this.addTodoClicked = this.addTodoClicked.bind(this);
   }
 
   componentDidMount() {
@@ -76,6 +77,7 @@ class ListTodosComponent extends Component {
               ))}
             </tbody>
           </table>
+          <button className="btn btn-success" onClick={this.addTodoClicked}>Add a New Todo</button>
         </Container>
       </div>
     );
@@ -91,6 +93,10 @@ class ListTodosComponent extends Component {
 
   updateTodoClicked(id) {
     this.props.navigate(`/todos/${id}`);
+  }
+
+  addTodoClicked() {
+    this.props.navigate('/todos/newtodo');
   }
 }
 

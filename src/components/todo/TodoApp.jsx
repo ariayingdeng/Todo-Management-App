@@ -53,6 +53,14 @@ class TodoApp extends Component {
                 </AuthenticatedRoute>
               }
             />
+                      <Route
+              path="/todos/newtodo"
+              element={
+                <AuthenticatedRoute>
+                  <TodoComponentWithParamsAndNavigation />
+                </AuthenticatedRoute>
+              }
+            />
             <Route
               path="/todos"
               element={

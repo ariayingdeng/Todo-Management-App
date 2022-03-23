@@ -34,7 +34,7 @@ class TodoComponent extends Component {
 
     return (
       <div>
-        <h1>Todo #{this.state.id}</h1>
+        <h1>Todo</h1>
         <Container>
           <Formik
             initialValues={{ description, targetDate }}
@@ -81,6 +81,22 @@ class TodoComponent extends Component {
 
   onSubmit(values) {
     console.log(values);
+    let username = AuthenticationService.getLoggedUsername();
+    let todo = {
+      id: this.state.id,
+      username: username,
+      description: values.description,
+      targetDate: values.targetDate,
+    };
+    if (!this.state.id) {
+      TodoService.addTodo(username, todo).then(() => {
+        this.props.navigate("/todos");
+      });
+    } else {
+      TodoService.updateTodo(username, this.state.id, todo).then(() => {
+        this.props.navigate("/todos");
+      });
+    }
   }
 
   validate(values) {
