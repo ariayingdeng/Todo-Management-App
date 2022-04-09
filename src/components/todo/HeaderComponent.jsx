@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Container, Navbar, Nav } from "react-bootstrap";
 import AuthenticationService from "./AuthenticationService";
+import { Link } from "react-router-dom";
 
 class HeaderComponent extends Component {
   render() {
@@ -11,28 +12,28 @@ class HeaderComponent extends Component {
           <Navbar.Brand href="/welcome/ying">Aria's</Navbar.Brand>
           {isUserLoggedIn && (
             <Navbar.Collapse>
-              <Nav.Link className="navbar-link" href="/welcome/ying">
+              <Link className="navbar-link" to="/welcome/ying">
                 Home
-              </Nav.Link>
-              <Nav.Link className="navbar-link" href="/todos">
+              </Link>&nbsp;&nbsp;
+              <Link className="navbar-link" to="/todos">
                 Todos
-              </Nav.Link>
+              </Link>
             </Navbar.Collapse>
           )}
           <Navbar.Collapse className="justify-content-end">
             {!isUserLoggedIn && (
-              <Nav.Link className="navbar-link" href="/login">
+              <Link className="navbar-link" to="/login">
                 Login
-              </Nav.Link>
+              </Link>
             )}
             {isUserLoggedIn && (
-              <Nav.Link
+              <Link
                 className="navbar-link"
-                href="/logout"
+                to="/logout"
                 onClick={AuthenticationService.logout}
               >
                 Logout
-              </Nav.Link>
+              </Link>
             )}
           </Navbar.Collapse>
         </Container>
